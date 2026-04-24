@@ -6,845 +6,390 @@
 <title>Jeu de maths</title>
 
 <style>
-body{
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  margin:0;
-  background:#f4f6fb;
-  color:#1f2a44;
-}
-
-.wrap{
-  max-width:980px;
-  margin:auto;
-  padding:20px;
-}
-
-.card{
-  background:#fff;
-  border-radius:24px;
-  padding:28px 22px;
-  box-shadow:0 10px 24px rgba(0,0,0,.10);
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f4f6fb;color:#1f2a44;}
+.wrap{max-width:980px;margin:auto;padding:12px;}
+.card{background:#fff;border-radius:24px;padding:16px;box-shadow:0 10px 24px rgba(0,0,0,.10);text-align:center;position:relative;overflow:hidden;}
 .screen{display:none;}
 .screen.active{display:block;}
-
-h1{
-  margin:0 0 18px 0;
-  font-size:34px;
-}
-
-h2{
-  margin:10px 0 18px 0;
-  font-size:28px;
-}
-
-.intro{
-  font-size:18px;
-  color:#4b5d7d;
-  margin-bottom:24px;
-  line-height:1.5;
-}
-
-.row{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-bottom:22px;
-}
-
-input,button{
-  font-size:20px;
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid #d1d8e6;
-}
-
-input[type="text"]{
-  width:260px;
-  text-align:center;
-}
-
-.big-btn{
-  min-width:170px;
-  min-height:62px;
-  border:0;
-  color:#fff;
-  font-weight:700;
-  font-size:22px;
-}
-
-.add{background:#2f80ed;}
-.sub{background:#9b51e0;}
-.mul{background:#27ae60;}
-.div{background:#f2994a;}
-.mix{background:#eb5757;}
-
-.primary{
-  background:#2f6fed;
-  color:#fff;
-  border:0;
-  font-weight:700;
-}
-
-.secondary{
-  background:#eaf0fb;
-  color:#24324d;
-  border:0;
-}
-
-.selected{
-  outline:5px solid rgba(0,0,0,.08);
-  transform:scale(1.03);
-}
-
-.top-actions{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
-
-.stats{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-top:10px;
-  margin-bottom:20px;
-}
-
-.badge{
-  background:#eef3ff;
-  color:#24324d;
-  border-radius:999px;
-  padding:8px 14px;
-  font-size:18px;
-}
-
-.question{
-  font-size:58px;
-  font-weight:900;
-  margin:26px 0 20px 0;
-}
-
-.dotsRow{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  flex-wrap:wrap;
-  min-height:28px;
-  margin:18px 0 22px 0;
-}
-
-.dot{
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  border:2px solid #2d3748;
-  background:#fff;
-}
-
-.answerRow{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-top:20px;
-  margin-bottom:20px;
-}
-
-#answer{
-  font-size:28px;
-  width:240px;
-  text-align:center;
-}
-
-.msg{
-  font-size:26px;
-  min-height:40px;
-  margin-top:22px;
-  line-height:1.5;
-}
-
-.reward{
-  font-size:84px;
-  min-height:100px;
-  margin-top:14px;
-  margin-bottom:16px;
-}
-
-.collection-box{
-  margin-top:26px;
-  background:#f8faff;
-  border:1px solid #dbe5f6;
-  border-radius:18px;
-  padding:18px;
-}
-
-.collection-title{
-  font-size:19px;
-  font-weight:700;
-  margin-bottom:12px;
-}
-
-.collection-status{
-  font-size:16px;
-  color:#566684;
-  margin-bottom:16px;
-  line-height:1.4;
-}
-
-.album-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(90px, 1fr));
-  gap:10px;
-}
-
-.album-card{
-  border:1px solid #d8e2f3;
-  border-radius:14px;
-  padding:10px 6px;
-  background:#fff;
-  min-height:86px;
-}
-
-.album-emoji{
-  font-size:34px;
-  line-height:1.2;
-}
-
-.album-name{
-  font-size:14px;
-  margin-top:4px;
-}
-
-.album-card.locked{
-  background:#f1f4fa;
-  color:#93a0b6;
-}
-
-.album-card.locked .album-emoji{
-  filter:grayscale(1);
-  opacity:.35;
-}
-
-.small-note{
-  font-size:15px;
-  color:#5b6c89;
-  margin-top:6px;
-  line-height:1.5;
-}
-
-.fireworks{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  display:none;
-  overflow:hidden;
-}
-
-.burst{
-  position:absolute;
-  width:12px;
-  height:12px;
-  border-radius:50%;
-  opacity:0;
-  animation:explode 1.2s ease-out forwards;
-}
-
-@keyframes explode{
-  0%{
-    transform:translate(0,0) scale(.2);
-    opacity:1;
-  }
-  100%{
-    transform:translate(var(--dx), var(--dy)) scale(1.8);
-    opacity:0;
-  }
-}
+h1{margin:0 0 10px 0;font-size:32px;}
+h2{margin:8px 0 12px 0;font-size:25px;}
+.row,.top-actions,.stats,.answerRow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;}
+.row{margin-bottom:14px;}
+.top-actions,.stats{margin-bottom:8px;}
+input,button{font-size:19px;padding:10px 12px;border-radius:14px;border:1px solid #d1d8e6;}
+input[type="text"]{width:250px;text-align:center;}
+.big-btn{min-width:155px;min-height:56px;border:0;color:#fff;font-weight:700;font-size:20px;}
+.add{background:#2f80ed}.sub{background:#9b51e0}.mul{background:#27ae60}.div{background:#f2994a}.mix{background:#eb5757}
+.primary{background:#2f6fed;color:#fff;border:0;font-weight:700;}
+.secondary{background:#eaf0fb;color:#24324d;border:0;}
+.selected{outline:5px solid rgba(0,0,0,.08);transform:scale(1.03);}
+.badge{background:#eef3ff;border-radius:999px;padding:7px 12px;font-size:16px;}
+.question{font-size:54px;font-weight:900;margin:14px 0 8px 0;}
+.dotsRow{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;min-height:22px;margin:6px 0 10px 0;}
+.dot{width:16px;height:16px;border-radius:50%;border:2px solid #2d3748;}
+#answer{font-size:26px;width:220px;text-align:center;}
+.mic-btn{min-width:64px;min-height:56px;font-size:28px;background:#27ae60;color:#fff;border:0;}
+.msg{font-size:24px;min-height:34px;margin-top:8px;margin-bottom:2px;line-height:1.3;}
+.reward{font-size:64px;min-height:66px;margin-top:0;margin-bottom:4px;}
+.collection-box{margin-top:8px;background:#f8faff;border:1px solid #dbe5f6;border-radius:18px;padding:10px;}
+.collection-title{font-size:18px;font-weight:700;margin-bottom:6px;}
+.collection-status{font-size:15px;color:#566684;margin-bottom:8px;}
+.album-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;}
+.album-card{border:1px solid #d8e2f3;border-radius:12px;padding:6px 3px;background:#fff;min-height:70px;}
+.album-card.highlight{outline:5px solid #ffd166;transform:scale(1.08);background:#fff8dc;}
+.album-emoji{font-size:27px;line-height:1.1;}
+.album-name{font-size:11px;margin-top:3px;}
+.album-card.locked{background:#f1f4fa;color:#93a0b6;}
+.album-card.locked .album-emoji{filter:grayscale(1);opacity:.35;}
+.small-note{font-size:14px;color:#5b6c89;line-height:1.4;}
+.fireworks{position:absolute;inset:0;pointer-events:none;display:none;overflow:hidden;z-index:10;background:rgba(0,0,0,.18);}
+.burst{position:absolute;width:14px;height:14px;border-radius:50%;opacity:0;animation:explode 2.2s ease-out forwards;}
+@keyframes explode{0%{transform:translate(0,0) scale(.2);opacity:1;}100%{transform:translate(var(--dx),var(--dy)) scale(2.4);opacity:0;}}
+.showcase{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(255,255,255,.96);z-index:20;text-align:center;padding:20px;}
+.showcase-emoji{font-size:110px;}
+.showcase-name{font-size:36px;font-weight:900;margin-top:10px;}
+.showcase-sub{font-size:24px;color:#52627f;margin-top:6px;}
+@media(max-width:900px){.album-grid{grid-template-columns:repeat(5,minmax(0,1fr));}}
 </style>
 </head>
+
 <body>
 <div class="wrap">
-  <div class="card">
+<div class="card">
 
-    <div id="homeScreen" class="screen active">
-      <h1>🧮 Jeu de maths</h1>
-      <div class="intro">Choisis ton nom, ton jeu et ton niveau.</div>
+<div id="homeScreen" class="screen active">
+  <h1>🧮 Jeu de maths</h1>
+  <div class="small-note">Choisis ton nom, ton jeu et ton niveau.</div>
 
-      <div class="row">
-        <input id="childName" type="text" placeholder="Nom de l’enfant">
-      </div>
+  <div class="row">
+    <input id="childName" type="text" placeholder="Nom de l’enfant">
+  </div>
 
-      <h2>Choisis ton jeu</h2>
-      <div class="row">
-        <button class="big-btn add" data-mode="add">➕ Addition</button>
-        <button class="big-btn sub" data-mode="sub">➖ Soustraction</button>
-        <button class="big-btn mul" data-mode="mul">✖️ Multiplication</button>
-        <button class="big-btn div" data-mode="div">➗ Division</button>
-        <button class="big-btn mix" data-mode="mix">🎲 Mélange</button>
-      </div>
+  <h2>Choisis ton jeu</h2>
+  <div class="row">
+    <button class="big-btn add" data-mode="add">➕ Addition</button>
+    <button class="big-btn sub" data-mode="sub">➖ Soustraction</button>
+    <button class="big-btn mul" data-mode="mul">✖️ Multiplication</button>
+    <button class="big-btn div" data-mode="div">➗ Division</button>
+    <button class="big-btn mix" data-mode="mix">🎲 Mélange</button>
+  </div>
 
-      <h2>Choisis ton niveau</h2>
-      <div class="row">
-        <button class="big-btn secondary level-btn" data-range="0-10">0–10</button>
-        <button class="big-btn secondary level-btn" data-range="10-20">10–20</button>
-        <button class="big-btn secondary level-btn" data-range="20-50">20–50</button>
-      </div>
+  <h2>Choisis ton niveau</h2>
+  <div class="row">
+    <button class="big-btn secondary level-btn" data-range="0-10">0–10</button>
+    <button class="big-btn secondary level-btn" data-range="10-20">10–20</button>
+    <button class="big-btn secondary level-btn" data-range="20-50">20–50</button>
+  </div>
 
-      <div class="row">
-        <button id="playBtn" class="big-btn primary">▶️ Jouer</button>
-      </div>
+  <div class="row">
+    <button id="playBtn" class="big-btn primary">▶️ Jouer</button>
+  </div>
 
-      <div class="small-note">
-        Après 10 bonnes réponses, feu d’artifice + progression automatique 🎆<br>
-        L’album d’animaux est sauvegardé sur l’iPad.
-      </div>
-    </div>
-
-    <div id="gameScreen" class="screen">
-      <div class="top-actions">
-        <button id="changeChoicesBtn" class="secondary" type="button">🔁 Changer les choix</button>
-        <button id="repeatBtn" class="secondary" type="button">🔊 Répéter</button>
-        <button id="resetAlbumBtn" class="secondary" type="button">🧹 Réinitialiser l’album</button>
-      </div>
-
-      <div class="stats">
-        <div class="badge">👤 <span id="playerLabel">Joueur</span></div>
-        <div class="badge">🎯 Mode: <span id="modeLabel">Addition</span></div>
-        <div class="badge">📚 Niveau: <span id="rangeLabel">0-10</span></div>
-        <div class="badge">✅ Bonnes: <span id="okCount">0</span>/10</div>
-      </div>
-
-      <div class="question" id="q">—</div>
-      <div class="dotsRow" id="dots"></div>
-
-      <div class="answerRow">
-        <input id="answer" type="text" placeholder="Réponse">
-        <button id="checkBtn" class="primary" type="button">Vérifier</button>
-      </div>
-
-      <div class="msg" id="msg"></div>
-      <div class="reward" id="reward"></div>
-
-      <div class="collection-box">
-        <div class="collection-title">🐾 Album d’animaux</div>
-        <div class="collection-status" id="collectionStatus">0 / 16 trouvés</div>
-        <div class="album-grid" id="albumGrid"></div>
-      </div>
-    </div>
-
-    <div class="fireworks" id="fireworks"></div>
+  <div class="small-note">
+    20 animaux à gagner. Après 2 erreurs, un animal est perdu.
   </div>
 </div>
 
+<div id="gameScreen" class="screen">
+  <div class="top-actions">
+    <button id="changeChoicesBtn" class="secondary">🔁 Choix</button>
+    <button id="repeatBtn" class="secondary">🔊 Répéter</button>
+    <button id="languageBtn" class="secondary">🌍 Français</button>
+    <button id="voiceBtn" class="secondary">🗣️ Voix</button>
+    <button id="prevLevelBtn" class="secondary">⬇️ Niveau</button>
+    <button id="nextLevelBtn" class="secondary">⬆️ Niveau</button>
+    <button id="resetAlbumBtn" class="secondary">🧹 Album</button>
+  </div>
+
+  <div class="stats">
+    <div class="badge">👤 <span id="playerLabel">Joueur</span></div>
+    <div class="badge">🎯 <span id="modeLabel">Addition</span></div>
+    <div class="badge">📚 <span id="rangeLabel">0-10</span></div>
+    <div class="badge">✅ <span id="okCount">0</span>/20</div>
+    <div class="badge">❌ <span id="errorCount">0</span>/2</div>
+    <div class="badge">🗣️ <span id="voiceLabel">Voix</span></div>
+    <div class="badge">🎙️ <span id="voiceCountLabel">0 voix</span></div>
+  </div>
+
+  <div class="question" id="q">—</div>
+  <div class="dotsRow" id="dots"></div>
+
+  <div class="answerRow">
+    <button id="micBtn" class="mic-btn">🎤</button>
+    <input id="answer" type="text" placeholder="Réponse">
+    <button id="checkBtn" class="primary">Vérifier</button>
+  </div>
+
+  <div class="msg" id="msg"></div>
+  <div class="reward" id="reward"></div>
+
+  <div class="collection-box">
+    <div class="collection-title">🐾 Tableau des animaux</div>
+    <div class="collection-status" id="collectionStatus">0 / 20 animaux gagnés</div>
+    <div class="album-grid" id="albumGrid"></div>
+  </div>
+</div>
+
+<div id="fireworks" class="fireworks"></div>
+
+<div id="showcase" class="showcase">
+  <div id="showcaseEmoji" class="showcase-emoji"></div>
+  <div id="showcaseName" class="showcase-name"></div>
+  <div id="showcaseSub" class="showcase-sub"></div>
+</div>
+
+</div>
+</div>
+
 <script>
-const STORAGE_KEY = "jeu-maths-album-v1";
+const STORAGE_KEY = "jeu-maths-animaux-v8";
+const BOARD_SIZE = 20;
 
-let a = 0;
-let b = 0;
-let op = '+';
-let expected = 0;
-let correctCount = 0;
-let locked = false;
+let a=0,b=0,op="+",expected=0;
+let correctCount=0,mistakes=0,locked=false;
+let selectedMode="add",selectedRange="0-10",selectedLanguage="fr";
+let currentVoiceIndex=0,voiceOptions=[];
+let boardAnimals=[];
 
-let selectedMode = 'add';
-let selectedRange = '0-10';
+const rangeOrder=["0-10","10-20","20-50"];
 
-const albumAnimals = [
-  { emoji:"🐶", name:"Chien" },
-  { emoji:"🐱", name:"Chat" },
-  { emoji:"🦊", name:"Renard" },
-  { emoji:"🐼", name:"Panda" },
-  { emoji:"🐸", name:"Grenouille" },
-  { emoji:"🐵", name:"Singe" },
-  { emoji:"🦁", name:"Lion" },
-  { emoji:"🐯", name:"Tigre" },
-  { emoji:"🦄", name:"Licorne" },
-  { emoji:"🐙", name:"Pieuvre" },
-  { emoji:"🐠", name:"Poisson" },
-  { emoji:"🦕", name:"Dinosaure" },
-  { emoji:"🦖", name:"Tyrannosaure" },
-  { emoji:"🐨", name:"Koala" },
-  { emoji:"🐰", name:"Lapin" },
-  { emoji:"🦉", name:"Hibou" }
+const animalBank=[
+{emoji:"🐻",fr:"ours",frArticle:"un",en:"bear",enArticle:"a"},
+{emoji:"🐮",fr:"vache",frArticle:"la",en:"cow",enArticle:"a"},
+{emoji:"🐶",fr:"chien",frArticle:"un",en:"dog",enArticle:"a"},
+{emoji:"🐱",fr:"chat",frArticle:"un",en:"cat",enArticle:"a"},
+{emoji:"🦊",fr:"renard",frArticle:"un",en:"fox",enArticle:"a"},
+{emoji:"🐼",fr:"panda",frArticle:"un",en:"panda",enArticle:"a"},
+{emoji:"🐸",fr:"grenouille",frArticle:"une",en:"frog",enArticle:"a"},
+{emoji:"🐵",fr:"singe",frArticle:"un",en:"monkey",enArticle:"a"},
+{emoji:"🦁",fr:"lion",frArticle:"un",en:"lion",enArticle:"a"},
+{emoji:"🐯",fr:"tigre",frArticle:"un",en:"tiger",enArticle:"a"},
+{emoji:"🦄",fr:"licorne",frArticle:"une",en:"unicorn",enArticle:"a"},
+{emoji:"🐙",fr:"pieuvre",frArticle:"une",en:"octopus",enArticle:"an"},
+{emoji:"🐠",fr:"poisson",frArticle:"un",en:"fish",enArticle:"a"},
+{emoji:"🦕",fr:"dinosaure",frArticle:"un",en:"dinosaur",enArticle:"a"},
+{emoji:"🦖",fr:"tyrannosaure",frArticle:"un",en:"T-Rex",enArticle:"a"},
+{emoji:"🐨",fr:"koala",frArticle:"un",en:"koala",enArticle:"a"},
+{emoji:"🐰",fr:"lapin",frArticle:"un",en:"rabbit",enArticle:"a"},
+{emoji:"🦉",fr:"hibou",frArticle:"un",en:"owl",enArticle:"an"},
+{emoji:"🦓",fr:"zèbre",frArticle:"un",en:"zebra",enArticle:"a"},
+{emoji:"🦒",fr:"girafe",frArticle:"une",en:"giraffe",enArticle:"a"},
+{emoji:"🐢",fr:"tortue",frArticle:"une",en:"turtle",enArticle:"a"},
+{emoji:"🦋",fr:"papillon",frArticle:"un",en:"butterfly",enArticle:"a"},
+{emoji:"🐘",fr:"éléphant",frArticle:"un",en:"elephant",enArticle:"an"},
+{emoji:"🦏",fr:"rhinocéros",frArticle:"un",en:"rhino",enArticle:"a"},
+{emoji:"🦛",fr:"hippopotame",frArticle:"un",en:"hippo",enArticle:"a"},
+{emoji:"🐺",fr:"loup",frArticle:"un",en:"wolf",enArticle:"a"},
+{emoji:"🐴",fr:"cheval",frArticle:"un",en:"horse",enArticle:"a"},
+{emoji:"🐷",fr:"cochon",frArticle:"un",en:"pig",enArticle:"a"},
+{emoji:"🐭",fr:"souris",frArticle:"une",en:"mouse",enArticle:"a"},
+{emoji:"🐹",fr:"hamster",frArticle:"un",en:"hamster",enArticle:"a"},
+{emoji:"🐔",fr:"poule",frArticle:"une",en:"chicken",enArticle:"a"},
+{emoji:"🐧",fr:"pingouin",frArticle:"un",en:"penguin",enArticle:"a"},
+{emoji:"🦆",fr:"canard",frArticle:"un",en:"duck",enArticle:"a"},
+{emoji:"🦅",fr:"aigle",frArticle:"un",en:"eagle",enArticle:"an"},
+{emoji:"🦜",fr:"perroquet",frArticle:"un",en:"parrot",enArticle:"a"},
+{emoji:"🦢",fr:"cygne",frArticle:"un",en:"swan",enArticle:"a"},
+{emoji:"🐍",fr:"serpent",frArticle:"un",en:"snake",enArticle:"a"},
+{emoji:"🦎",fr:"lézard",frArticle:"un",en:"lizard",enArticle:"a"},
+{emoji:"🐬",fr:"dauphin",frArticle:"un",en:"dolphin",enArticle:"a"},
+{emoji:"🐳",fr:"baleine",frArticle:"une",en:"whale",enArticle:"a"},
+{emoji:"🦈",fr:"requin",frArticle:"un",en:"shark",enArticle:"a"},
+{emoji:"🦭",fr:"phoque",frArticle:"un",en:"seal",enArticle:"a"},
+{emoji:"🐊",fr:"crocodile",frArticle:"un",en:"crocodile",enArticle:"a"},
+{emoji:"🐝",fr:"abeille",frArticle:"une",en:"bee",enArticle:"a"},
+{emoji:"🐞",fr:"coccinelle",frArticle:"une",en:"ladybug",enArticle:"a"},
+{emoji:"🦗",fr:"grillon",frArticle:"un",en:"cricket",enArticle:"a"},
+{emoji:"🕷️",fr:"araignée",frArticle:"une",en:"spider",enArticle:"a"},
+{emoji:"🦂",fr:"scorpion",frArticle:"un",en:"scorpion",enArticle:"a"},
+{emoji:"🦘",fr:"kangourou",frArticle:"un",en:"kangaroo",enArticle:"a"},
+{emoji:"🦥",fr:"paresseux",frArticle:"un",en:"sloth",enArticle:"a"}
 ];
 
-let unlockedAnimals = [];
+const FR_NUM=new Map([["zéro",0],["zero",0],["un",1],["deux",2],["trois",3],["quatre",4],["cinq",5],["six",6],["sept",7],["huit",8],["neuf",9],["dix",10],["onze",11],["douze",12],["treize",13],["quatorze",14],["quinze",15],["seize",16],["dix sept",17],["dix-sept",17],["dix huit",18],["dix-huit",18],["dix neuf",19],["dix-neuf",19],["vingt",20],["vingt et un",21],["vingt-et-un",21],["trente",30],["quarante",40],["cinquante",50]]);
+const EN_NUM=new Map([["zero",0],["one",1],["two",2],["three",3],["four",4],["five",5],["six",6],["seven",7],["eight",8],["nine",9],["ten",10],["eleven",11],["twelve",12],["thirteen",13],["fourteen",14],["fifteen",15],["sixteen",16],["seventeen",17],["eighteen",18],["nineteen",19],["twenty",20],["thirty",30],["forty",40],["fifty",50]]);
 
-const goodTemplates = [
-  "{name}, bravo ! C’est excellent !",
-  "Super {name} !",
-  "Génial {name} !",
-  "{name}, c’est très bien !",
-  "Bravo {name}, tu es très fort !"
-];
+const $=id=>document.getElementById(id);
+const homeScreen=$("homeScreen"),gameScreen=$("gameScreen"),childNameEl=$("childName");
+const qEl=$("q"),dotsEl=$("dots"),answerEl=$("answer"),msgEl=$("msg"),rewardEl=$("reward");
+const okCountEl=$("okCount"),errorCountEl=$("errorCount"),playerLabelEl=$("playerLabel");
+const modeLabelEl=$("modeLabel"),rangeLabelEl=$("rangeLabel"),voiceLabelEl=$("voiceLabel"),voiceCountLabelEl=$("voiceCountLabel");
+const fireworksEl=$("fireworks"),albumGridEl=$("albumGrid"),collectionStatusEl=$("collectionStatus");
+const showcase=$("showcase"),showcaseEmoji=$("showcaseEmoji"),showcaseName=$("showcaseName"),showcaseSub=$("showcaseSub");
+const modeButtons=document.querySelectorAll("[data-mode]"),levelButtons=document.querySelectorAll(".level-btn");
 
-const retryTemplates = [
-  "Essaie encore {name}, tu es capable !",
-  "Recommence doucement {name}.",
-  "On réessaie {name} !",
-  "Ce n’est pas grave {name}, essaie encore !"
-];
-
-const FR_NUM = new Map([
-  ["zéro",0],["zero",0],["un",1],["deux",2],["trois",3],["quatre",4],
-  ["cinq",5],["six",6],["sept",7],["huit",8],["neuf",9],["dix",10],
-  ["onze",11],["douze",12],["treize",13],["quatorze",14],["quinze",15],
-  ["seize",16],["dix sept",17],["dix-sept",17],["dix huit",18],["dix-huit",18],
-  ["dix neuf",19],["dix-neuf",19],["vingt",20],["vingt et un",21],["vingt-et-un",21],
-  ["vingt deux",22],["vingt-deux",22],["vingt trois",23],["vingt-trois",23],
-  ["vingt quatre",24],["vingt-quatre",24],["vingt cinq",25],["vingt-cinq",25],
-  ["vingt six",26],["vingt-six",26],["vingt sept",27],["vingt-sept",27],
-  ["vingt huit",28],["vingt-huit",28],["vingt neuf",29],["vingt-neuf",29],
-  ["trente",30],["quarante",40],["cinquante",50]
-]);
-
-const homeScreen = document.getElementById('homeScreen');
-const gameScreen = document.getElementById('gameScreen');
-const childNameEl = document.getElementById('childName');
-const playBtn = document.getElementById('playBtn');
-const repeatBtn = document.getElementById('repeatBtn');
-const changeChoicesBtn = document.getElementById('changeChoicesBtn');
-const resetAlbumBtn = document.getElementById('resetAlbumBtn');
-const qEl = document.getElementById('q');
-const dotsEl = document.getElementById('dots');
-const answerEl = document.getElementById('answer');
-const checkBtn = document.getElementById('checkBtn');
-const msgEl = document.getElementById('msg');
-const rewardEl = document.getElementById('reward');
-const okCountEl = document.getElementById('okCount');
-const playerLabelEl = document.getElementById('playerLabel');
-const modeLabelEl = document.getElementById('modeLabel');
-const rangeLabelEl = document.getElementById('rangeLabel');
-const fireworksEl = document.getElementById('fireworks');
-const collectionStatusEl = document.getElementById('collectionStatus');
-const albumGridEl = document.getElementById('albumGrid');
-const modeButtons = document.querySelectorAll('[data-mode]');
-const levelButtons = document.querySelectorAll('.level-btn');
-
-function saveState() {
-  try {
-    const state = {
-      childName: childNameEl.value.trim(),
-      selectedMode,
-      selectedRange,
-      unlockedAnimals
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({childName:childNameEl.value.trim(),selectedMode,selectedRange,selectedLanguage,boardAnimals,currentVoiceIndex}));}catch(e){}
 }
-
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    const state = JSON.parse(raw);
-
-    if (typeof state.childName === "string") childNameEl.value = state.childName;
-    if (typeof state.selectedMode === "string") selectedMode = state.selectedMode;
-    if (typeof state.selectedRange === "string") selectedRange = state.selectedRange;
-    if (Array.isArray(state.unlockedAnimals)) unlockedAnimals = state.unlockedAnimals;
-  } catch (e) {}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY); if(!raw)return;
+    const s=JSON.parse(raw);
+    if(typeof s.childName==="string")childNameEl.value=s.childName;
+    if(typeof s.selectedMode==="string")selectedMode=s.selectedMode;
+    if(typeof s.selectedRange==="string")selectedRange=s.selectedRange;
+    if(typeof s.selectedLanguage==="string")selectedLanguage=s.selectedLanguage;
+    if(Array.isArray(s.boardAnimals))boardAnimals=s.boardAnimals;
+    if(typeof s.currentVoiceIndex==="number")currentVoiceIndex=s.currentVoiceIndex;
+  }catch(e){}
 }
-
-function normalize(s){
-  return (s || "")
-    .toLowerCase()
-    .trim()
-    .replace(/[’']/g, " ")
-    .replace(/\s+/g, " ");
-}
-
-function getChildName(){
-  return childNameEl.value.trim() || "mon champion";
-}
-
-function fillTemplate(list){
-  const tpl = list[randInt(0, list.length - 1)];
-  return tpl.replaceAll("{name}", getChildName());
-}
-
+function name(){return childNameEl.value.trim()||(selectedLanguage==="fr"?"mon champion":"champion");}
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function normalize(s){return(s||"").toLowerCase().trim().replace(/[’']/g," ").replace(/\s+/g," ");}
 function speak(text){
-  if(!('speechSynthesis' in window)) return;
+  if(!("speechSynthesis" in window))return;
   speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'fr-CA';
-  u.rate = 0.9;
-  u.pitch = 1.15;
-  speechSynthesis.speak(u);
+  const u=new SpeechSynthesisUtterance(text);
+  const v=getCurrentVoice();
+  if(v){u.voice=v;u.lang=v.lang;}else u.lang=selectedLanguage==="fr"?"fr-CA":"en-US";
+  u.rate=.9;u.pitch=1.08;speechSynthesis.speak(u);
 }
-
-function randInt(min, max){
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function loadVoices(){
+  const all=speechSynthesis.getVoices();
+  const lang=selectedLanguage==="fr"?"fr":"en";
+  voiceOptions=all.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(lang));
+  if(!voiceOptions.length)voiceOptions=all;
+  if(currentVoiceIndex>=voiceOptions.length)currentVoiceIndex=0;
+  updateVoiceLabel();
 }
-
-function parseRange(){
-  const [minStr, maxStr] = selectedRange.split('-');
-  return { min: parseInt(minStr, 10), max: parseInt(maxStr, 10) };
+function getCurrentVoice(){return voiceOptions[currentVoiceIndex]||null;}
+function updateVoiceLabel(){
+  const v=getCurrentVoice();
+  voiceLabelEl.textContent=v?v.name:(selectedLanguage==="fr"?"Voix par défaut":"Default voice");
+  voiceCountLabelEl.textContent=selectedLanguage==="fr"?`${voiceOptions.length} voix`:`${voiceOptions.length} voices`;
 }
-
-function actualMode(){
-  if(selectedMode !== 'mix') return selectedMode;
-  const all = ['add','sub','mul','div'];
-  return all[randInt(0, all.length - 1)];
+function cycleVoice(){if(voiceOptions.length>1)currentVoiceIndex=(currentVoiceIndex+1)%voiceOptions.length;updateVoiceLabel();saveState();speak(selectedLanguage==="fr"?"Nouvelle voix":"New voice");}
+function modeLabel(){
+  const fr={add:"Addition",sub:"Soustraction",mul:"Multiplication",div:"Division",mix:"Mélange"};
+  const en={add:"Addition",sub:"Subtraction",mul:"Multiplication",div:"Division",mix:"Mixed"};
+  return(selectedLanguage==="fr"?fr:en)[selectedMode];
 }
-
-function modeLabel(mode){
-  if(mode === 'add') return 'Addition';
-  if(mode === 'sub') return 'Soustraction';
-  if(mode === 'mul') return 'Multiplication';
-  if(mode === 'div') return 'Division';
-  return 'Mélange';
-}
-
 function updateLabels(){
-  playerLabelEl.textContent = getChildName();
-  modeLabelEl.textContent = modeLabel(selectedMode);
-  rangeLabelEl.textContent = selectedRange;
+  playerLabelEl.textContent=name();modeLabelEl.textContent=modeLabel();rangeLabelEl.textContent=selectedRange;
+  okCountEl.textContent=correctCount;errorCountEl.textContent=mistakes;
+  $("languageBtn").textContent=selectedLanguage==="fr"?"🌍 Français":"🌍 English";
+  $("checkBtn").textContent=selectedLanguage==="fr"?"Vérifier":"Check";
+  answerEl.placeholder=selectedLanguage==="fr"?"Réponse":"Answer";updateVoiceLabel();
 }
-
-function updateSelectionsUI() {
-  modeButtons.forEach(btn => {
-    btn.classList.toggle('selected', btn.dataset.mode === selectedMode);
-  });
-  levelButtons.forEach(btn => {
-    btn.classList.toggle('selected', btn.dataset.range === selectedRange);
-  });
-}
-
-function showHome(){
-  homeScreen.classList.add('active');
-  gameScreen.classList.remove('active');
-}
-
-function showGame(){
-  homeScreen.classList.remove('active');
-  gameScreen.classList.add('active');
-}
-
-function applyDictationFix(){
-  const raw = normalize(answerEl.value);
-
-  if(FR_NUM.has(raw)){
-    answerEl.value = String(FR_NUM.get(raw));
-    return;
-  }
-
-  const digits = raw.replace(/\D+/g, '');
-  if(digits.length > 0){
-    answerEl.value = digits;
-  }
-}
-
-let watcher = null;
-let watcherEnd = 0;
-
-function startWatcher(){
-  stopWatcher();
-  watcherEnd = Date.now() + 2000;
-  watcher = setInterval(() => {
-    applyDictationFix();
-    if(Date.now() >= watcherEnd) stopWatcher();
-  }, 40);
-}
-
-function stopWatcher(){
-  if(watcher) clearInterval(watcher);
-  watcher = null;
-}
-
-function drawDots(n){
-  dotsEl.innerHTML = '';
-  if(n <= 0 || n > 20) return;
-  for(let i = 0; i < n; i++){
-    const d = document.createElement('div');
-    d.className = 'dot';
-    dotsEl.appendChild(d);
-  }
-}
-
-function speakQuestion(){
-  const word =
-    op === '+' ? 'plus' :
-    op === '−' ? 'moins' :
-    op === '×' ? 'fois' :
-    'divisé par';
-
-  speak(`${a} ${word} ${b}`);
-}
-
-function renderAlbum(){
-  albumGridEl.innerHTML = '';
-
-  albumAnimals.forEach(animal => {
-    const found = unlockedAnimals.includes(animal.emoji);
-    const card = document.createElement('div');
-    card.className = 'album-card' + (found ? '' : ' locked');
-
-    const emoji = document.createElement('div');
-    emoji.className = 'album-emoji';
-    emoji.textContent = found ? animal.emoji : '❔';
-
-    const name = document.createElement('div');
-    name.className = 'album-name';
-    name.textContent = found ? animal.name : 'Mystère';
-
-    card.appendChild(emoji);
-    card.appendChild(name);
-    albumGridEl.appendChild(card);
-  });
-
-  collectionStatusEl.textContent = `${unlockedAnimals.length} / ${albumAnimals.length} trouvés`;
-}
-
-function unlockAnimal(){
-  const lockedAnimals = albumAnimals.filter(a => !unlockedAnimals.includes(a.emoji));
-  let chosen;
-
-  if(lockedAnimals.length > 0){
-    chosen = lockedAnimals[randInt(0, lockedAnimals.length - 1)];
-    unlockedAnimals.push(chosen.emoji);
-  } else {
-    chosen = albumAnimals[randInt(0, albumAnimals.length - 1)];
-  }
-
-  renderAlbum();
-  saveState();
-  return chosen.emoji;
-}
-
-function nextRangeValue(){
-  if(selectedRange === '0-10') return '10-20';
-  if(selectedRange === '10-20') return '20-50';
-  return '20-50';
-}
-
+function updateSelections(){modeButtons.forEach(b=>b.classList.toggle("selected",b.dataset.mode===selectedMode));levelButtons.forEach(b=>b.classList.toggle("selected",b.dataset.range===selectedRange));}
+function parseRange(){const[min,max]=selectedRange.split("-").map(Number);return{min,max};}
+function actualMode(){return selectedMode==="mix"?["add","sub","mul","div"][rand(0,3)]:selectedMode;}
+function questionWord(){return selectedLanguage==="fr"?{"+":"plus","−":"moins","×":"fois","÷":"divisé par"}[op]:{"+":"plus","−":"minus","×":"times","÷":"divided by"}[op];}
+function speakQuestion(){speak(`${a} ${questionWord()} ${b}`);}
+function drawDots(n){dotsEl.innerHTML="";if(n<=0||n>20)return;for(let i=0;i<n;i++){const d=document.createElement("div");d.className="dot";dotsEl.appendChild(d);}}
 function newQuestion(){
-  updateLabels();
-  msgEl.textContent = '';
-  rewardEl.textContent = '';
-  answerEl.value = '';
-  answerEl.focus();
-  startWatcher();
-
-  const { min, max } = parseRange();
-  const mode = actualMode();
-
-  if(mode === 'add'){
-    a = randInt(min, max);
-    b = randInt(min, max);
-    op = '+';
-    expected = a + b;
-    drawDots(expected <= 20 ? expected : 0);
-  }
-
-  if(mode === 'sub'){
-    a = randInt(min, max);
-    b = randInt(min, max);
-    if(b > a) [a, b] = [b, a];
-    op = '−';
-    expected = a - b;
-    drawDots(a <= 20 ? a : 0);
-  }
-
-  if(mode === 'mul'){
-    const mulMax = max <= 10 ? 10 : (max <= 20 ? 12 : 15);
-    a = randInt(0, Math.min(10, mulMax));
-    b = randInt(0, Math.min(10, mulMax));
-    op = '×';
-    expected = a * b;
-    drawDots(0);
-  }
-
-  if(mode === 'div'){
-    const divisor = randInt(1, Math.min(10, max));
-    const quotient = randInt(0, Math.min(10, max));
-    a = divisor * quotient;
-    b = divisor;
-    op = '÷';
-    expected = quotient;
-    drawDots(0);
-  }
-
-  qEl.textContent = `${a} ${op} ${b} = ?`;
-  speakQuestion();
+  locked=false;msgEl.textContent="";rewardEl.textContent="";answerEl.value="";updateLabels();
+  const{min,max}=parseRange();const m=actualMode();
+  if(m==="add"){a=rand(min,max);b=rand(min,max);op="+";expected=a+b;drawDots(expected<=20?expected:0);}
+  if(m==="sub"){a=rand(min,max);b=rand(min,max);if(b>a)[a,b]=[b,a];op="−";expected=a-b;drawDots(a<=20?a:0);}
+  if(m==="mul"){a=rand(0,10);b=rand(0,10);op="×";expected=a*b;drawDots(0);}
+  if(m==="div"){b=rand(1,10);expected=rand(0,10);a=b*expected;op="÷";drawDots(0);}
+  qEl.textContent=`${a} ${op} ${b} = ?`;speakQuestion();
 }
-
-function launchFireworks(){
-  fireworksEl.innerHTML = '';
-  fireworksEl.style.display = 'block';
-
-  const colors = ['#ff4d4f','#faad14','#36cfc9','#597ef7','#eb2f96','#73d13d'];
-
-  for(let burst = 0; burst < 8; burst++){
-    const centerX = randInt(10, 90);
-    const centerY = randInt(10, 55);
-
-    for(let i = 0; i < 14; i++){
-      const p = document.createElement('div');
-      p.className = 'burst';
-      p.style.left = centerX + '%';
-      p.style.top = centerY + '%';
-      p.style.background = colors[randInt(0, colors.length - 1)];
-      p.style.setProperty('--dx', randInt(-120, 120) + 'px');
-      p.style.setProperty('--dy', randInt(-120, 120) + 'px');
-      fireworksEl.appendChild(p);
-    }
+function renderAlbum(highlightIndex=-1){
+  albumGridEl.innerHTML="";
+  for(let i=0;i<BOARD_SIZE;i++){
+    const animal=boardAnimals[i];
+    const card=document.createElement("div");
+    card.className="album-card"+(animal?"":" locked")+(i===highlightIndex?" highlight":"");
+    card.innerHTML=`<div class="album-emoji">${animal?animal.emoji:"❔"}</div><div class="album-name">${animal?(selectedLanguage==="fr"?animal.fr:animal.en):(selectedLanguage==="fr"?"Mystère":"Mystery")}</div>`;
+    albumGridEl.appendChild(card);
   }
-
-  setTimeout(() => {
-    fireworksEl.style.display = 'none';
-    fireworksEl.innerHTML = '';
-  }, 1600);
+  collectionStatusEl.textContent=selectedLanguage==="fr"?`${boardAnimals.length} / ${BOARD_SIZE} animaux gagnés`:`${boardAnimals.length} / ${BOARD_SIZE} animals won`;
 }
-
-function finishSeries(){
-  locked = true;
-
-  const currentLevel = selectedRange;
-  selectedRange = nextRangeValue();
-  updateLabels();
-  updateSelectionsUI();
-  saveState();
-
-  let message = `🎉 Bravo ${getChildName()} ! Tu as réussi 10 questions !`;
-  if(currentLevel !== selectedRange){
-    message += ` Nouveau niveau : ${selectedRange} !`;
-  } else {
-    message += ` Tu restes au niveau ${selectedRange}.`;
-  }
-
-  if(unlockedAnimals.length === albumAnimals.length){
-    message += ` En plus, ton album est complet !`;
-  }
-
-  msgEl.textContent = message;
-  rewardEl.textContent = '🏆';
-  speak(message);
-  launchFireworks();
-
-  setTimeout(() => {
-    correctCount = 0;
-    okCountEl.textContent = correctCount;
-    locked = false;
-    newQuestion();
-  }, 5000);
+function randomAnimalNotOnBoard(){
+  const available=animalBank.filter(a=>!boardAnimals.some(b=>b.emoji===a.emoji));
+  return available.length?available[rand(0,available.length-1)]:animalBank[rand(0,animalBank.length-1)];
 }
-
+function winAnimal(){
+  if(boardAnimals.length>=BOARD_SIZE)return null;
+  const animal=randomAnimalNotOnBoard();boardAnimals.push(animal);renderAlbum(boardAnimals.length-1);saveState();
+  if(selectedLanguage==="fr"){msgEl.textContent=`${name()}, tu gagnes ${animal.frArticle} ${animal.fr} !`;speak(`${name()}, tu gagnes ${animal.frArticle} ${animal.fr}`);}
+  else{msgEl.textContent=`${name()}, you win ${animal.enArticle} ${animal.en}!`;speak(`${name()}, you win ${animal.enArticle} ${animal.en}`);}
+  rewardEl.textContent=animal.emoji;
+  if(boardAnimals.length===BOARD_SIZE)setTimeout(completeAlbum,1800);
+  return animal;
+}
+function loseRandomAnimal(){
+  if(!boardAnimals.length)return;
+  const idx=rand(0,boardAnimals.length-1);const animal=boardAnimals.splice(idx,1)[0];renderAlbum();saveState();
+  if(selectedLanguage==="fr"){msgEl.textContent=`${name()}, tu perds ${animal.frArticle} ${animal.fr}.`;speak(`${name()}, tu perds ${animal.frArticle} ${animal.fr}`);}
+  else{msgEl.textContent=`${name()}, you lose ${animal.enArticle} ${animal.en}.`;speak(`${name()}, you lose ${animal.enArticle} ${animal.en}`);}
+  rewardEl.textContent=animal.emoji;
+}
+function launchFireworks(duration=6000){
+  fireworksEl.innerHTML="";fireworksEl.style.display="block";
+  const colors=["#ff4d4f","#faad14","#36cfc9","#597ef7","#eb2f96","#73d13d","#ffd700","#ff85c0"];
+  const interval=setInterval(()=>{for(let burst=0;burst<5;burst++){const x=rand(5,95),y=rand(5,65);for(let i=0;i<22;i++){const p=document.createElement("div");p.className="burst";p.style.left=x+"%";p.style.top=y+"%";p.style.background=colors[rand(0,colors.length-1)];p.style.setProperty("--dx",rand(-180,180)+"px");p.style.setProperty("--dy",rand(-180,180)+"px");fireworksEl.appendChild(p);}}},600);
+  setTimeout(()=>{clearInterval(interval);fireworksEl.style.display="none";fireworksEl.innerHTML="";},duration);
+}
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+async function completeAlbum(){
+  locked=true;launchFireworks(8000);
+  const message=selectedLanguage==="fr"?`${name()}, tu as complété tout le tableau des animaux !`:`${name()}, you completed the whole animal board!`;
+  msgEl.textContent=message;rewardEl.textContent="🏆";speak(message);
+  await wait(8500);
+  await showcaseAnimals([...boardAnimals]);
+  boardAnimals=[];correctCount=0;mistakes=0;saveState();renderAlbum();updateLabels();
+  await wait(5000);
+  showcase.style.display="none";gameScreen.classList.remove("active");homeScreen.classList.add("active");locked=false;
+}
+async function showcaseAnimals(list){
+  showcase.style.display="flex";
+  for(const animal of list){
+    showcaseEmoji.textContent=animal.emoji;
+    showcaseName.textContent=animal.fr.charAt(0).toUpperCase()+animal.fr.slice(1);
+    showcaseSub.textContent=animal.en.charAt(0).toUpperCase()+animal.en.slice(1);
+    renderAlbum(boardAnimals.findIndex(a=>a.emoji===animal.emoji));
+    speak(`${animal.fr}. ${animal.en}.`);
+    await wait(1800);
+  }
+}
+function applyDictationFix(){
+  const raw=normalize(answerEl.value);const map=selectedLanguage==="fr"?FR_NUM:EN_NUM;
+  if(map.has(raw)){answerEl.value=String(map.get(raw));return;}
+  const digits=raw.replace(/\D+/g,"");if(digits.length>0)answerEl.value=digits;
+}
+let watcher=null;
+function startWatcher(){clearInterval(watcher);const end=Date.now()+2000;watcher=setInterval(()=>{applyDictationFix();if(Date.now()>end)clearInterval(watcher);},40);}
+function openKeyboard(){answerEl.focus();startWatcher();}
 function checkAnswer(){
-  if(locked) return;
-
-  applyDictationFix();
-  const val = parseInt(answerEl.value, 10);
-  if(Number.isNaN(val)) return;
-
-  locked = true;
-
-  if(val === expected){
-    correctCount++;
-    okCountEl.textContent = correctCount;
-
-    const animal = unlockAnimal();
-    rewardEl.textContent = animal;
-
-    const text = fillTemplate(goodTemplates);
-    msgEl.textContent = text;
-    speak(text);
-
-    if(correctCount >= 10){
-      setTimeout(finishSeries, 5000);
-      return;
-    }
-
-    setTimeout(() => {
-      locked = false;
-      newQuestion();
-    }, 5000);
-
-  } else {
-    rewardEl.textContent = '';
-    const text = fillTemplate(retryTemplates);
-    msgEl.textContent = text;
-    speak(text);
-
-    setTimeout(() => {
-      locked = false;
-      answerEl.focus();
-      answerEl.select();
-    }, 3000);
+  if(locked)return;applyDictationFix();const val=parseInt(answerEl.value,10);if(Number.isNaN(val))return;
+  locked=true;
+  if(val===expected){
+    correctCount++;mistakes=0;updateLabels();winAnimal();
+    if(boardAnimals.length<BOARD_SIZE)setTimeout(newQuestion,5000);
+  }else{
+    mistakes++;updateLabels();
+    if(mistakes>=2){mistakes=0;updateLabels();loseRandomAnimal();setTimeout(()=>{locked=false;answerEl.focus();answerEl.select();startWatcher();},4000);}
+    else{const text=selectedLanguage==="fr"?`${name()}, essaie encore. Tu as encore une chance.`:`${name()}, try again. You still have one chance.`;msgEl.textContent=text;rewardEl.textContent="";speak(text);setTimeout(()=>{locked=false;answerEl.focus();answerEl.select();startWatcher();},3000);}
   }
 }
+function setRange(r){selectedRange=r;updateLabels();updateSelections();saveState();}
+function nextRange(){setRange(rangeOrder[Math.min(rangeOrder.indexOf(selectedRange)+1,rangeOrder.length-1)]);newQuestion();}
+function prevRange(){setRange(rangeOrder[Math.max(rangeOrder.indexOf(selectedRange)-1,0)]);newQuestion();}
+function toggleLanguage(){selectedLanguage=selectedLanguage==="fr"?"en":"fr";currentVoiceIndex=0;loadVoices();updateLabels();renderAlbum();saveState();if(gameScreen.classList.contains("active"))speakQuestion();}
 
-modeButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    selectedMode = btn.dataset.mode;
-    updateSelectionsUI();
-    saveState();
-  });
-});
+modeButtons.forEach(btn=>btn.onclick=()=>{selectedMode=btn.dataset.mode;updateSelections();saveState();});
+levelButtons.forEach(btn=>btn.onclick=()=>{selectedRange=btn.dataset.range;updateSelections();saveState();});
+$("playBtn").onclick=()=>{homeScreen.classList.remove("active");gameScreen.classList.add("active");correctCount=0;mistakes=0;updateLabels();newQuestion();};
+$("changeChoicesBtn").onclick=()=>{gameScreen.classList.remove("active");homeScreen.classList.add("active");};
+$("repeatBtn").onclick=()=>speakQuestion();
+$("voiceBtn").onclick=()=>cycleVoice();
+$("languageBtn").onclick=()=>toggleLanguage();
+$("prevLevelBtn").onclick=()=>prevRange();
+$("nextLevelBtn").onclick=()=>nextRange();
+$("resetAlbumBtn").onclick=()=>{boardAnimals=[];correctCount=0;mistakes=0;renderAlbum();updateLabels();saveState();};
+$("micBtn").onclick=()=>openKeyboard();
+$("checkBtn").onclick=()=>checkAnswer();
+answerEl.addEventListener("focus",startWatcher);
+["input","change","keyup","blur"].forEach(e=>answerEl.addEventListener(e,()=>setTimeout(applyDictationFix,0)));
+answerEl.addEventListener("keydown",e=>{if(e.key==="Enter")checkAnswer();});
+childNameEl.addEventListener("input",()=>{updateLabels();saveState();});
 
-levelButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    selectedRange = btn.dataset.range;
-    updateSelectionsUI();
-    saveState();
-  });
-});
+if("speechSynthesis" in window){loadVoices();setTimeout(loadVoices,500);setTimeout(loadVoices,1500);speechSynthesis.onvoiceschanged=loadVoices;}
 
-playBtn.addEventListener('click', () => {
-  correctCount = 0;
-  okCountEl.textContent = correctCount;
-  updateLabels();
-  saveState();
-  showGame();
-  newQuestion();
-});
-
-changeChoicesBtn.addEventListener('click', () => {
-  saveState();
-  showHome();
-});
-
-repeatBtn.addEventListener('click', () => {
-  speakQuestion();
-});
-
-resetAlbumBtn.addEventListener('click', () => {
-  unlockedAnimals = [];
-  renderAlbum();
-  saveState();
-  msgEl.textContent = "Album réinitialisé.";
-  rewardEl.textContent = '';
-  speak("Album réinitialisé.");
-});
-
-checkBtn.addEventListener('click', checkAnswer);
-
-answerEl.addEventListener('keydown', (e) => {
-  if(e.key === 'Enter') checkAnswer();
-});
-
-answerEl.addEventListener('focus', startWatcher);
-['input','change','keyup','blur'].forEach(evt => {
-  answerEl.addEventListener(evt, () => setTimeout(applyDictationFix, 0));
-});
-
-childNameEl.addEventListener('input', () => {
-  updateLabels();
-  saveState();
-});
-
-loadState();
-updateSelectionsUI();
-updateLabels();
-renderAlbum();
+loadState();updateSelections();updateLabels();renderAlbum();
 </script>
 </body>
 </html>
